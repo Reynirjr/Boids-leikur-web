@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boids Leikur</title>
+    <meta name="description" content="Boids Leikur is an interactive game where players control a predator in a simulated environment of boids (fish). The objective is to eat as many fish as possible while navigating through the dynamic and realistic behavior of the boids.">
+    <meta name="keywords" content="Boids, Game, Predator, Simulation, Interactive, Fish, Dynamic Behavior, Realistic, HTML5, Canvas">
+    <meta name="author" content="Benjamin">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="introScreen" class="intro-screen">
+        <h1>Boids Hákarl!</h1>
+        <p>Notaðu örvatakkana til að hreyfa hákarlinn og borðaðu alla fiskana til að sigra leikinn. 
+           Hægt er endurræsa leikinn með "R" og pása leikinn með "P".</p>
+        <button id="startButton" class="start-button">Hefja leik</button>
+    </div>
+
+    <div id="gameContainer" class="game-container" style="display: none;">
+        <canvas id="gameCanvas"></canvas>
+        <div class="ui">
+            <label id="scoreLabel">Fiskar borðaðir: 0</label>
+        </div>
+        <a href="#" class="back">Aftur á heimasíðu</a>
+    </div>
+
+    <div id="gameOverScreen" class="game-over-screen" style="display: none;">
+        <h1>Jibbí! þú ást alla fiskana!</h1>
+        <button id="restartButton" class="restart-button">Ennþá Svangur/Svöng?</button>
+        <a href="#" class="back">Aftur á heimasíðu</a>
+    </div>
+
+    
+
+    <script src="js/vec2d.js"></script>
+    <script src="js/boid.js"></script>
+    <script src="js/hakarl.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
