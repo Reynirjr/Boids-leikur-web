@@ -66,6 +66,13 @@ class Hakarl {
 
         if(this.velocity.x < 0 && this.velocity.y === 0){
             ctx.scale(-1, 1);
+        }else if(this.velocity.x < 0 && this.velocity.y < 0){
+            ctx.scale(1, -1);
+            ctx.rotate(angle * Math.PI / 2);
+        
+        }else if(this.velocity.x < 0 && this.velocity.y > 0){
+            ctx.scale(1, -1);
+            ctx.rotate(angle * Math.PI / 2);
         }else{
             ctx.rotate(angle);
         }
