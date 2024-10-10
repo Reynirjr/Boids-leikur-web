@@ -8,6 +8,8 @@ let backgroundImage = new Image();
 backgroundImage.src = '../img/vatnBakgrunnur.jpg';
 let backgroundMusic = new Audio('../sound/Groove.mp3');
 let eatSound = new Audio('../sound/ate.mp3');
+backgroundMusic.volume = 0.15;
+eatSound.volume = 0.2;
 backgroundMusic.loop = true;
 let animationFrameId; 
 
@@ -22,7 +24,6 @@ window.onload = function() {
         introScreen.style.display = 'none'; 
         gameContainer.style.display = 'block'; 
 
-        backgroundMusic.volume = 0.15;
         backgroundMusic.play();  
         
         init();
