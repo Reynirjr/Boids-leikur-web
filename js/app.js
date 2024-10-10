@@ -22,6 +22,7 @@ window.onload = function() {
         introScreen.style.display = 'none'; 
         gameContainer.style.display = 'block'; 
 
+        backgroundMusic.volume = 0.15;
         backgroundMusic.play();  
         
         init();
