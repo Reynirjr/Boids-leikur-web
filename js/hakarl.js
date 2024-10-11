@@ -11,8 +11,30 @@ class Hakarl {
         this.image.src = '../img/hakarl.png';
         this.keysPressed = {};
         this.angle = 0;
+
+        this.touchstart = null;
     }
     handleInput() {
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            this.touchStart = this.getTouchPos(event);
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            let touchPos = this.getTouchPos(event);
+            let direction = Vec2D.subtract(touchPos, this.touchStart);
+            direction.normalize();
+            direction.multiply(this.maxSpeed);
+            this.velocity = direction;
+            this.touchStart = touchPos;
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (event) => {
+            event.preventDefault();
+            this.velocity = new Vec2D(0, 0);
+        }, { passive: false });
+
         window.addEventListener('keydown', (event) => {
             this.keysPressed[event.key] = true;
         });
@@ -20,6 +42,13 @@ class Hakarl {
             this.keysPressed[event.key] = false;
         });
     }
+
+    getTouchPos(event) {
+        let rect = canvas.getBoundingClientRect();
+        let touch = event.touches[0] || event.changedTouches[0];
+        return new Vec2D(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+
 
 
     update() {

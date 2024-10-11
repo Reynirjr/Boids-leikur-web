@@ -39,6 +39,10 @@ function init() {
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
 
+    resizeCanvas();
+
+    window.addEventListener('resize', resizeCanvas);
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -57,6 +61,10 @@ function init() {
 
     gameController = new GameController();
     gameLoop();
+}
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
 function resetGame() {
