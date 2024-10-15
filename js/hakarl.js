@@ -3,7 +3,7 @@
 class Hakarl {
     constructor(x, y) {
         this.position = new Vec2D(x, y);
-        this.velocity = new Vec2D(Math.random() - 0.5, Math.random() - 0.5);
+        this.velocity = new Vec2D(0,0);
         this.size = 20;  
         this.maxSpeed = 3;
 
@@ -12,27 +12,20 @@ class Hakarl {
         this.keysPressed = {};
         this.angle = 0;
 
-        this.touchstart = null;
+        this.targetPosition = null;
+        this.isUsingTouch = false;
     }
     handleInput() {
         canvas.addEventListener('touchstart', (event) => {
             event.preventDefault();
-            this.touchStart = this.getTouchPos(event);
-        }, { passive: false });
-
-        canvas.addEventListener('touchmove', (event) => {
-            event.preventDefault();
             let touchPos = this.getTouchPos(event);
-            let direction = Vec2D.subtract(touchPos, this.touchStart);
+            this.targetPosition = touchPos;
+            this.isUsingTouch = true;
+
+            let direction = Vec2D.subtract(touchPos, this.position);
             direction.normalize();
             direction.multiply(this.maxSpeed);
             this.velocity = direction;
-            this.touchStart = touchPos;
-        }, { passive: false });
-
-        canvas.addEventListener('touchend', (event) => {
-            event.preventDefault();
-            this.velocity = new Vec2D(0, 0);
         }, { passive: false });
 
         window.addEventListener('keydown', (event) => {
@@ -52,31 +45,45 @@ class Hakarl {
 
 
     update() {
+        if (this.isUsingTouch && this.targetPosition) {
+            let distanceToTarget = this.position.distance(this.targetPosition);
 
-        this.velocity = new Vec2D(0, 0);
+            if (distanceToTarget < this.size) {
+                this.velocity = new Vec2D(0, 0);  
+                this.targetPosition = null; 
+            } else {
 
-        if (this.keysPressed['ArrowUp']) {
-            this.velocity.y = -this.maxSpeed;
-            this.angle = Math.PI * 1.5;  
+                let direction = Vec2D.subtract(this.targetPosition, this.position);
+                direction.normalize();
+                direction.multiply(this.maxSpeed);
+                this.velocity = direction;
+            }
         }
-        if (this.keysPressed['ArrowDown']) {
-            this.velocity.y = this.maxSpeed;
-            this.angle = Math.PI / 2;  
-        }
-        if (this.keysPressed['ArrowLeft']) {
-            this.velocity.x = -this.maxSpeed;
-            this.angle = Math.PI;  
-        }
-        if (this.keysPressed['ArrowRight']) {
-            this.velocity.x = this.maxSpeed;
-            this.angle = 0;  
-        }
+        if (!this.isUsingTouch) {
+            this.velocity = new Vec2D(0, 0);  
 
-        if(this.velocity.magnitude() > 0){
-            this.velocity.normalize();
-            this.velocity.multiply(this.maxSpeed);
-        }
+            if (this.keysPressed['ArrowUp']) {
+                this.velocity.y = -this.maxSpeed;
+                this.angle = Math.PI * 1.5;  
+            }
+            if (this.keysPressed['ArrowDown']) {
+                this.velocity.y = this.maxSpeed;
+                this.angle = Math.PI / 2;  
+            }
+            if (this.keysPressed['ArrowLeft']) {
+                this.velocity.x = -this.maxSpeed;
+                this.angle = Math.PI;  
+            }
+            if (this.keysPressed['ArrowRight']) {
+                this.velocity.x = this.maxSpeed;
+                this.angle = 0;  
+            }
 
+            if (this.velocity.magnitude() > 0) {
+                this.velocity.normalize();
+                this.velocity.multiply(this.maxSpeed);
+            }
+        }
 
         this.position.add(this.velocity);
 
@@ -92,19 +99,22 @@ class Hakarl {
         ctx.save();
         ctx.translate(this.position.x, this.position.y);
         let angle = Math.atan2(this.velocity.y, this.velocity.x);
-
-        if(this.velocity.x < 0 && this.velocity.y === 0){
-            ctx.scale(-1, 1);
-        }else if(this.velocity.x < 0 && this.velocity.y < 0){
-            ctx.scale(1, -1);
-            ctx.rotate(angle * Math.PI / 2);
-        
-        }else if(this.velocity.x < 0 && this.velocity.y > 0){
-            ctx.scale(1, -1);
-            ctx.rotate(angle * Math.PI / 2);
-        }else{
+        if(this.isUsingTouch){
             ctx.rotate(angle);
-        }
+        }else {
+            if(this.velocity.x < 0 && this.velocity.y === 0){
+                ctx.scale(-1, 1);
+            }else if(this.velocity.x < 0 && this.velocity.y < 0){
+                ctx.scale(1, -1);
+                ctx.rotate(angle * Math.PI / 2);
+            
+            }else if(this.velocity.x < 0 && this.velocity.y > 0){
+                ctx.scale(1, -1);
+                ctx.rotate(angle * Math.PI / 2);
+            }else{
+                ctx.rotate(angle);
+            }
+        }   
 
         ctx.drawImage(this.image, -this.size, -this.size, this.size * 3, this.size * 2);
 
