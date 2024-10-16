@@ -7,6 +7,8 @@ class Hakarl {
         this.size = 20;  
         this.maxSpeed = 3;
 
+        this.scaleSpeed();
+
         this.image = new Image();  
         this.image.src = '../img/hakarl.png';
         this.keysPressed = {};
@@ -14,6 +16,10 @@ class Hakarl {
 
         this.targetPosition = null;
         this.isUsingTouch = false;
+    }
+    scaleSpeed() {
+        let scaleFactor = Math.min(canvas.width / 1920, canvas.height / 1080); 
+        this.maxSpeed = 5 * scaleFactor;
     }
     handleInput() {
         canvas.addEventListener('touchstart', (event) => {
@@ -45,6 +51,7 @@ class Hakarl {
 
 
     update() {
+        this.scaleSpeed();
         if (this.isUsingTouch && this.targetPosition) {
             let distanceToTarget = this.position.distance(this.targetPosition);
 

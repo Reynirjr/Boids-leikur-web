@@ -13,10 +13,16 @@ class Boid {
         this.fleeReactionTime = 20;
         this.type = type;
 
+        this.scaleSpeed();
+
         this.image = new Image();
         this.setImageBasedonType();
     }
-
+    scaleSpeed() {
+        let scaleFactor = Math.min(canvas.width / 1920, canvas.height / 1080);
+        this.maxSpeed = 5 * scaleFactor;
+        this.fleeSpeed = 6 * scaleFactor;
+    }
     setImageBasedonType() {
         switch (this.type){
             case 'bluefish':
