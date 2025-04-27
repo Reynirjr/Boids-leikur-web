@@ -1,4 +1,3 @@
-// boid.js
 
 class Boid {
     constructor(x, y, type) {
@@ -20,6 +19,7 @@ class Boid {
     }
     scaleSpeed() {
         let scaleFactor = Math.min(canvas.width / 1920, canvas.height / 1080);
+        scaleFactor = Math.max(scaleFactor, 0.75); 
         this.maxSpeed = 5 * scaleFactor;
         this.fleeSpeed = 6 * scaleFactor;
     }
